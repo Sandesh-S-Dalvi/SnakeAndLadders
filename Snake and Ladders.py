@@ -56,11 +56,9 @@ def Roll_Dice():
     # ADD Score, 
     # Update Scores, - (Keep adding Score till one player reaches 100 and wins.)
         # Max Score 100
-        # To check Snake
+        # To check Snake - (Deduct from Score when player reach specific spot less than 100.)
         # To Check Win
-    # Deduct Score - (Deduct from Score when player reach specific spot less than 100.)
-        # Min Score 0
-
+   
 ## Score_Six()
     # extra_turn
 
@@ -72,8 +70,6 @@ def Roll_Dice():
     # Ladder
     ## Bounce
     # Winner
-
-
 
 if __name__ == '__main__':
     Roll_Dice()
