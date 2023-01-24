@@ -6,37 +6,44 @@ import os
 
 class Player:
 
-    def __init__(self,name,srnm,score):
+    def __init__(self,name,srnm,score,playing):
 
         self.name = name
         self.srnm = srnm
         self.score = score
+        self.playing = playing
 
 
      # Roll Dice function    
-    def Roll_Dice(self):
+    def Roll_Dice(self,ifRolled):
 
-        d_Count = rd.randint(1, 6)
-        return d_Count
-
+        if ifRolled == 'y':
+            d_Count = rd.randint(1, 6)
+            return d_Count
+        else:
+            pass
 
     # Show score
     def GetScore(self):
         return self.score
 
-
     # Add Score
-    def AddScore(self,score,d_Count):
+    def AddScore(self,d_Count):
 
         self.score = self.score + d_Count
         return self.score
 
-
     # Snake - reduce score
-    def ReduceScore():
+    def ReduceScore(self,d_Count):
 
-        score = score - snake
-        return score
+        self.score = self.score - d_Count
+        return self.score
+
+    # playing change flag
+    def winner(self):
+
+        self.playing = 0
+        return self.playing
  
 
 
@@ -45,16 +52,18 @@ class Board:
 
     start = 0
     end = 100
-    snakes = {8:4,13:9,22:16}
-    ladders = {11:18,25:36,35:48}
+    snakes = {8:4,13:9,22:5}
+    ladders = {11:5,25:8,35:2}
 
-# Display Score
-def ShowScore():
+    # Display Score
+    def ShowScore(self,player):
 
-    print('--------------------------------------')
-    print(f"{player[1].name} Score: {p1_score}  Next Ladder: {ladder}  Next Snake: {Snake} ")
-    print(f"{player[2].name} Score: {p2_score}")
-    print('--------------------------------------')
+        print('--------------------------------------')
+
+        for i in players:
+            print(f"{player[i].name} Score: {player[i].score}")
+
+        print('--------------------------------------')
     
 
 
@@ -91,58 +100,78 @@ def jls_extract_def():
         name = input('Enter name of player: ')
         srnm = 0
         score = 0
-        player[i] = Player(name,srnm,score)
+        playing = 1
+        player[i] = Player(name,srnm,score,playing)
     return player
 
 player = jls_extract_def()
 
-# Play
+# Start game Play
 
 board = Board()
 
 os.system('cls\n')
 
-print('Snake and Ladders!!!!\n')
+while sum(player.playing) == 1:
+    print('Snake and Ladders!!!!')
+    board.ShowScore(player)
+    print(f"\n{player[i].name}'s turn")
+    ifRolled = Input('Roll dice?')
 
-print('--------------------------------------')
+    d_count = player[i].Roll_Dice()
+    print(d_count)
+    p1_score = player[1].GetScore()
+    print(p1_score)
 
-for i in players:
-    print(f"{player[i].name} Score: {player[i].score}")
+    if p1_score + d_count > 100:
+        p1_score = p1_score
+    elif p1_score + d_count == 100:
+        print('player 1 won')
+    else:
+        p1_score = player[1].AddScore(d_count)
+    # p1_score = 36
 
-print('--------------------------------------')
+    snakes = board.snakes
+    ladders = board.ladders
 
-print(player[1].name)
+    if p1_score in ladders.keys():
+        d_count = ladders[p1_score]
+        p1_score = player[1].AddScore(d_count)
+        print(player[1].GetScore())
+    elif p1_score in snakes.keys():
+        d_count = snakes[p1_score]
+        p1_score = player[1].ReduceScore(d_count)
+    else:
+        print(p1_score)
+        
 
-d_count = player[1].Roll_Dice()
-print(d_count)
-p1_score = player[1].GetScore()
-print(p1_score)
-p1_score = player[1].AddScore(p1_score,d_count)
-print(p1_score)
-d_count = player[1].Roll_Dice()
-print(d_count)
-p1_score =  player[1].AddScore(p1_score,d_count)
+
+# p1_score = player[1].AddScore(d_count)
+# print(p1_score)
+# d_count = player[1].Roll_Dice()
+# print(d_count)
+# p1_score =  player[1].AddScore(d_count)
 # print(p1_score)
 
 
-print(player[2].name)
+# print(player[2].name)
 
-d_count = player[2].Roll_Dice()
-print(d_count)
-p2_score = player[2].GetScore()
-print(p2_score)
-p2_score = player[2].AddScore(p2_score,d_count)
-print(p2_score)
-d_count = player[2].Roll_Dice()
-print(d_count)
-p2_score =  player[2].AddScore(p2_score,d_count)
+# d_count = player[2].Roll_Dice()
+# print(d_count)
+# p2_score = player[2].GetScore()
 # print(p2_score)
-# print("\n")
-print('--------------------------------------')
-print(f"{player[1].name} Score: {p1_score}")
-print(f"{player[2].name} Score: {p2_score}")
-print('--------------------------------------')
-    
+# p2_score = player[2].AddScore(d_count)
+# print(p2_score)
+# d_count = player[2].Roll_Dice()
+# print(d_count)
+# p2_score =  player[2].AddScore(d_count)
+# # print(p2_score)
+# # print("\n")
+
+print(board.snakes)
+print(board.ladders)
+
+board.ShowScore(player)
 
 
 # Players
@@ -161,16 +190,33 @@ print('--------------------------------------')
 #     Start
 #     End
 # score
-#     Add
-#         Normal
-#         Ladder
-#         Delete
-#         Snake
+#   Ladder
+        # if p1_score in ladder.keys()
+        #     p1_score = p1.score + ladder[score]]
+        #     return p1_score
+        #     print ('{p1} climbed a ladder')
+        #     display.score(ladder)
+#   Snake(p1_score)
+        # else if p1_score in snakes.keys()
+        #     p1_score = p1.score - snake[score]]
+        #     return p1_score
+        #     print ('{p1} bit by snake')
+        #     display.score(snake)
+#   normal
+        # else if p1_score != 100
+        #     return p1_score
+        #     print ('{p1} moved to {p1_Score}')
+        #     display.score(normal)
+#   playing
+        # else
+        #      print(f"{p1} Won the game")
+        #      display.score(playing)
+            
 # Display Score
 #     Normal
 #     Snake
 #     Ladder
-#     Winner
+#     playing
 # rules
 
 
@@ -225,7 +271,7 @@ print('--------------------------------------')
     # Snake
     # Ladder
     ## Bounce
-    # Winner
+    # playing
 
 
 # if __name__ == '__main__':
