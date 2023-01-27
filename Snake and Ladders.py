@@ -1,4 +1,5 @@
 import random as rd
+import time
 import os
 
 
@@ -33,19 +34,20 @@ class Player:
         self.score = self.score + d_Count
         return self.score
 
-    # Snake - reduce score
-    def ReduceScore(self,d_Count):
+    # Ladder - Add Score
+    def LadderScore(self,d_Count):
 
-        self.score = self.score - d_Count
+        self.score = d_Count
+        return self.score    
+
+    # Snake - reduce score
+    def SnakeScore(self,d_Count):
+
+        self.score = d_Count
         return self.score
 
     # playing change flag
     def winner(self):
-
-        self.playing = 0
-        return self.playing
-    
-    def DelPlayer(self):
 
         self.playing = 0
         return self.playing
@@ -55,9 +57,9 @@ class Player:
 class Board:
 
     start = 0
-    end = 10
-    snakes = {8:4,13:9,22:5}
-    ladders = {11:5,25:8,35:2}
+    end = 20
+    snakes = {32:10,36:6,48:26,62:18,88:24,95:56,97:78}
+    ladders = {4:14,8:30,21:42,28:76,50:67,71:92,80:99}
 
     # Display Score
     def ShowScore(self,player):
@@ -66,31 +68,38 @@ class Board:
         for i in players:
             print(f"{player[i].name} Score: {player[i].score}")
         print('--------------------------------------')
+
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
     
 
 
 ######################################################################################
-
-
-
-# Ask for No. of Players in game.
+os.system('cls\n')
 
 while True:
 
-    os.system('cls')
-
-    p_count = int(input('Enter no. of Players:  ') or 0)
-
-    if p_count < 2 or p_count > 5:
-
+    try:
+        p_count = int(input('Enter no. of Players (2 - 5):  ') or 0)
+        if p_count > 1 and p_count <= 5:
+            os.system('cls')
+            print(f'No. of players set to {p_count}')
+            break
+    except ValueError:
+        print('Enter value more than 1 and upto 55')
+        continue
+    else:
         print('Enter value more than 1 and upto 5')
         continue
-
-    else:
-
-        p_count = p_count
-
-        break
 
 # Create players instances
 
@@ -98,7 +107,7 @@ players = range(1,p_count+1)
 
 def jls_extract_def():
     player = {}
-    for i in players: #[:p_count]:
+    for i in players:
         name = input('Enter name of player: ')
         srnm = 0
         score = 0
@@ -108,79 +117,108 @@ def jls_extract_def():
 
 player = jls_extract_def()
 
-
-
-active = 0
-for i in players:
-    active += player[i].playing
-
-# Start game Play
+#### Creating Board instance ####
 
 board = Board()
 ladders = board.ladders
 snakes = board.snakes
 end = board.end
 
-os.system('cls\n')
+os.system('color')
+x = 0
+for i in range(24):
+  colors = ""
+  for j in range(5):
+    code = str(x+j)
+    colors = colors + "\33[" + code + "m\\33[" + code + "m\033[0m "
+  print(colors)
+  x = x + 5
 
+#### Start game Play ####
 
 i = 1
-while active > 1:
+while sum(player[i].playing for i in player.keys()) > 1:
 
     # os.system('cls\n')
 
+    # if sum(player[i].playing for i in player.keys()) > 1 and player[i].playing == 1:
     # if player[i].playing == 1:
-    try:
+    #     i = i
+    # else:
+    #     i += 1
+    #     continue
+    
         print('Snake and Ladders!!!!')
         board.ShowScore(player)
+
+        # Ask Player to Roll Dice
 
         print(f"\n{player[i].name}'s turn")
         ifRolled = input('Roll dice?' or 'y')
         
         d_count = player[i].Roll_Dice(ifRolled)
-        print(d_count)
-        p1_score = player[i].GetScore()
-        print(p1_score)
+        print(f"Dice Count: {d_count}")
+        p_score = player[i].GetScore()
+        print(f"{player[i].name} old score was: {p_score}")
 
-        if p1_score + d_count > end:
-            p1_score = p1_score
+        if p_score + d_count > end:
+            p_score = p_score
         else:
-            p1_score = player[i].AddScore(d_count)
+            p_score = player[i].AddScore(d_count)
 
-        if p1_score in ladders.keys():
-            d_count = ladders[p1_score]
-            p1_score = player[i].AddScore(d_count)
-            print(f"{player[i].name} climbed a ladder")
+        if p_score in ladders.keys():
+            p_score = ladders.get(p_score)
+            p_score = player[i].LadderScore(p_score)
+            print(f"{bcolors().BOLD}{player[i].name} climbed a 'ladder{bcolors.ENDC}")
             print(player[i].GetScore())
+            print(f"{player[i].name} new score is: {p_score}")
+            time.sleep(3)
 
-        elif p1_score in snakes.keys():
-            d_count = snakes[p1_score]
-            p1_score = player[i].ReduceScore(d_count)
+        elif p_score in snakes.keys():
+            p_score = snakes.get(p_score)
+            p_score = player[i].SnakeScore(p_score)
             print(f"{player[i].name} bit by snake")
+            print(player[i].GetScore())
+            print(f"{player[i].name} new score is: {p_score}")
+            time.sleep(3)
 
-        elif p1_score == end:
+        elif p_score == end:
+            print(f"{player[i].name} new score is: {p_score}")
             print(f"{player[i].name} won the game.")
             player[i].winner()
-            p_count = p_count - 1
-            # del player[i]
+            time.sleep(3)
+
+            if sum(player[j].playing for j in player.keys()) == 1:
+                break
 
         else:
-            print(p1_score)
+            print(f"{bcolors().OKGREEN}{bcolors().BOLD}{player[i].name} new score is: {p_score}{bcolors().ENDC}{bcolors().ENDC}")
+            time.sleep(3)
 
-        i = i + 1
-        if i > p_count:
-                i = 1
+        if i + 1 in player.keys():
+            i += 1
+        else:
+            i = 1
 
-        for j in players:
-            try:
-                active = j + player[j].playing
-            except:
-                KeyError()
-    except:
-        KeyError()
-Print('Game ends')
-                    
+    # else:
+    #     if i + 1 in player.keys():
+    #         i += 1
+    #     else:
+    #         i = 1
 
+board.ShowScore(player)
+print('Game ends')
+
+
+
+x = 0
+for i in range(24):
+  colors = ""
+  for j in range(5):
+    code = str(x+j)
+    colors = colors + "\33[" + code + "m\\33[" + code + "m\033[0m "
+  print(colors)
+  x = x + 5
 
 
 # Players
@@ -200,21 +238,21 @@ Print('Game ends')
 #     End
 # score
 #   Ladder
-        # if p1_score in ladder.keys()
-        #     p1_score = p1.score + ladder[score]]
-        #     return p1_score
+        # if p_score in ladder.keys()
+        #     p_score = p1.score + ladder[score]]
+        #     return p_score
         #     print ('{p1} climbed a ladder')
         #     display.score(ladder)
-#   Snake(p1_score)
-        # else if p1_score in snakes.keys()
-        #     p1_score = p1.score - snake[score]]
-        #     return p1_score
+#   Snake(p_score)
+        # else if p_score in snakes.keys()
+        #     p_score = p1.score - snake[score]]
+        #     return p_score
         #     print ('{p1} bit by snake')
         #     display.score(snake)
 #   normal
-        # else if p1_score != 100
-        #     return p1_score
-        #     print ('{p1} moved to {p1_Score}')
+        # else if p_score != 100
+        #     return p_score
+        #     print ('{p1} moved to {p_score}')
         #     display.score(normal)
 #   playing
         # else
