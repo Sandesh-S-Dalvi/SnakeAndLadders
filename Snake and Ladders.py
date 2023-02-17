@@ -41,20 +41,20 @@ class Player:
     def LadderScore(self,d_Count):
 
         self.score = d_Count
-        print(f"{bcolors().OKGREEN}{bcolors().BOLD}{player[i].name} climbed a 'ladder{bcolors.ENDC}")
+        print(f"{bcolors().OKGREEN}{bcolors().BOLD}{player[i].name} climbed a Ladder{bcolors.ENDC}")
         print(player[i].score)
         print(f"{player[i].name} new score is: {self.score}")
-        time.sleep(6)
+        time.sleep(3)
         return self.score   
 
     # Snake - reduce score
     def SnakeScore(self,d_Count):
 
         self.score = d_Count
-        print(f"{player[i].name} bit by snake")
+        print(f"{bcolors().OKRED}{bcolors().BOLD}{player[i].name} bit by Snake{bcolors.ENDC}")
         print(player[i].score)
-        print(f"{bcolors().OKRED}{bcolors().BOLD}{player[i].name} climbed a 'ladder{bcolors.ENDC}")
-        time.sleep(6)
+        print(f"{player[i].name} new score is: {self.score}")
+        time.sleep(3)
         return self.score
 
     # playing change flag
@@ -68,10 +68,10 @@ class Player:
 class Board:
 
     start = 0
-    end = 50
+    end = 100
 
-    snakes = {1:11,2:22,3:33,4:44,5:55,6:66}
-    # snakes = {32:10,36:6,48:26,62:18,88:24,95:56,97:78}
+    # snakes = {1:11,2:22,3:33,4:44,5:55,6:66}
+    snakes = {32:10,36:6,48:26,62:18,88:24,95:56,97:78}
     ladders = {4:14,8:30,21:42,28:76,50:67,71:92,80:99}
 
     # Display Score
@@ -103,10 +103,11 @@ os.system('cls\n')
 while True:
 
     try:
-        print(f"{bcolors().OKRED}{bcolors().BOLD}Snake {bcolors().OKCYAN}{bcolors().BOLD}and {bcolors().OKGREEN}{bcolors().BOLD}Ladders!!!!{bcolors().ENDC}")
+        print(f"{bcolors().OKRED}{bcolors().BOLD}Snake {bcolors().OKCYAN}{bcolors().BOLD}and {bcolors().OKGREEN}{bcolors().BOLD}Ladders!!!!{bcolors().ENDC}\n")
         p_count = int(input('Enter no. of Players (2 - 5):  ') or 0)
         if p_count > 1 and p_count <= 5:
             os.system('cls')
+            print(f"{bcolors().OKRED}{bcolors().BOLD}Snake {bcolors().OKCYAN}{bcolors().BOLD}and {bcolors().OKGREEN}{bcolors().BOLD}Ladders!!!!{bcolors().ENDC}\n")
             print(f'No. of players set to {p_count}')
             break
     except ValueError:
@@ -153,8 +154,11 @@ while sum(player[i].playing for i in player.keys()) > 1:
     #     i += 1
     #     continue
     
-    print(f"{bcolors().OKRED}{bcolors().BOLD}Snake {bcolors().OKCYAN}{bcolors().BOLD}and {bcolors().OKGREEN}{bcolors().BOLD}Ladders!!!!{bcolors().ENDC}")
+    print(f"{bcolors().OKRED}{bcolors().BOLD}Snake {bcolors().OKCYAN}{bcolors().BOLD}and {bcolors().OKGREEN}{bcolors().BOLD}Ladders!!!!{bcolors().ENDC}\n")
     board.ShowScore(player)
+
+    print(f"\nSnakes on {snakes}")
+    print(f"Ladders on {ladders}")
 
     # Ask Player to Roll Dice
 
@@ -186,7 +190,7 @@ while sum(player[i].playing for i in player.keys()) > 1:
             break
 
     else:
-        print(f"{bcolors().OKGREEN}{bcolors().BOLD}{player[i].name} new score is: {p_score}{bcolors().ENDC}{bcolors().ENDC}")
+        print(f"\n{bcolors().OKGREEN}{bcolors().BOLD}{player[i].name} new score is: {p_score}{bcolors().ENDC}{bcolors().ENDC}")
         time.sleep(3)
 
     if i + 1 in player.keys():
@@ -213,124 +217,3 @@ for i in range(24):
     colors = colors + "\33[" + code + "m\\33[" + code + "m\033[0m "
   print(colors)
   x = x + 5
-
-
-
-
-# Players
-
-#     Name
-#     score
-
-#     +role dice
-# dice
-
-#     Range (1,6)
-
-# board
-#     snakes
-#     Ladders
-#     Start
-#     End
-# score
-#   Ladder
-        # if p_score in ladder.keys()
-        #     p_score = p1.score + ladder[score]]
-        #     return p_score
-        #     print ('{p1} climbed a ladder')
-        #     display.score(ladder)
-#   Snake(p_score)
-        # else if p_score in snakes.keys()
-        #     p_score = p1.score - snake[score]]
-        #     return p_score
-        #     print ('{p1} bit by snake')
-        #     display.score(snake)
-#   normal
-        # else if p_score != 100
-        #     return p_score
-        #     print ('{p1} moved to {p_score}')
-        #     display.score(normal)
-#   playing
-        # else
-        #      print(f"{p1} Won the game")
-        #      display.score(playing)
-            
-# Display Score
-#     Normal
-#     Snake
-#     Ladder
-#     playing
-# rules
-
-
-
-
-
-#--> create_players()
-
-    # Ask user for number of players
-
-    # Ask Player Name
-
-    # Create player and set score
-
-
-# Start_Game
-
-    ## Randomly generate first player to start - players play sequence.
-
-    # Set player sequence
-
-    # Ask to Start game
-
-
-# snakes in [1,2,3,4,5,6]
-
-# Ladders in [1,2,3,4,5,6]
-
-
-# Roll_Dice():
-
-
-# Scoring()
-    # Read Scores, 
-    # ADD Score, 
-    # Update Scores, - (Keep adding Score till one player reaches 100 and wins.)
-        # To check Ladder
-        # To check Snake - (Deduct from Score when player reach specific spot less than 100.)
-        # To Check Win - Max Score 100
-   
-
-## Score_Six()
-    # extra_turn
-
-
-## Next Counts to Snake and ladder
-
-
-# Display_Score()
-
-    # Game on
-    # Snake
-    # Ladder
-    ## Bounce
-    # playing
-
-
-# if __name__ == '__main__':
-
-#     Roll_Dice()
-
-
-# Start Game
-# Player 1 rolls Dice - Roll dice
-# P1 checks Score - Display count
-# Moves counter - Add count
-# Check for - If Else
-    # Gen
-    # Snake
-    # Ladder
-# Message - Snake ladder
-# P1 places Counter
-
-# Repeat for Player 2
